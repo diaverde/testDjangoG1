@@ -28,3 +28,17 @@ def new(request):
     else:
         return HttpResponseNotAllowed(["POST"], "Método inválido.")
 
+def read(request):
+    if request.method == 'GET':
+        members = Member.objects.all()
+        allMembersData = []
+        for x in members:
+            memberData = {"documento": x.id, "nombre": x.name, "correo": x.email}
+            allMembersData.append(memberData)
+        #print(json.dumps(allMembersData))
+        resp = HttpResponse()
+        resp.headers['Content-Type'] = 'text/json'
+        resp.content = json.dumps(allMembersData)
+        return resp
+    else:
+        return HttpResponseNotAllowed(["GET"], "Método inválido.")
